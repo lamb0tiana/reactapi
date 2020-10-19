@@ -30,6 +30,8 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "fzaninotto/faker": "^1.9",
+        "ottaviano/faker-gravatar": "^0.1.2",
         "symfony/maker-bundle": "^1.21"
     },
     "config": {
