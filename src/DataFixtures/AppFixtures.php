@@ -7,8 +7,16 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Ottaviano\Faker\Gravatar;
 use Faker;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 class AppFixtures extends Fixture
 {
+    private $encoder;
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -17,10 +25,10 @@ class AppFixtures extends Fixture
         for($i=0; $i < 20; $i++)
         {
             $user = (new User())
-                        ->setPassword(User::DEFAULT_PASSWORD)
                         ->setEmail(sprintf('user%s@test.com',$i+1))
                         ->setUsername($faker->userName)
                         ->setPicture($faker->gravatarUrl($avatarCat[array_rand($avatarCat)]));
+            $user->setPassword($this->encoder->encodePassword($user,User::DEFAULT_PASSWORD));
             $manager->persist($user);
         }
 
