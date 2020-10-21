@@ -7,7 +7,7 @@ use App\Repository\AnnounceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=AnnounceRepository::class)
@@ -32,12 +32,13 @@ class Announce
     private $description;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private $postedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="annonce", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="annonce", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $pictures;
 
