@@ -6,8 +6,21 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PicturesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"={
+ *              "normalization_context"={"picture:read"}
+ *          }
+ *     },
+ *     itemOperations={
+ *          "get"={
+ *              "normalization_context"={"picture:read"}
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=PicturesRepository::class)
  */
 class Pictures
@@ -20,6 +33,7 @@ class Pictures
     private $id;
 
     /**
+     * @Groups({"picture:read"})
      * @ORM\Column(type="string", length=255)
      */
     private $path;

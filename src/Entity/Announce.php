@@ -8,13 +8,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"={
+ *              "normalization_context"={"groups"={"announce:read","picture:read"}}
+ *          },
+ *     "post"
+ *      },
+ *     itemOperations={
+ *          "get"={
+ *              "normalization_context"={"groups"={"announce:read","picture:read"}}
+ *          }
+ *     })
  * @ORM\Entity(repositoryClass=AnnounceRepository::class)
  */
 class Announce
 {
     /**
+     * @Groups({"announce:read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,22 +36,26 @@ class Announce
     private $id;
 
     /**
+     * @Groups({"announce:read"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
+     * @Groups({"announce:read"})
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Groups({"announce:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private $postedAt;
 
     /**
+     * @Groups({"picture:read"})
      * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="annonce", orphanRemoval=true, cascade={"persist","remove"})
      */
     private $pictures;
